@@ -1,20 +1,32 @@
 const express = require('express');
 const mongoose = require('mongoose');
+require('dotenv').config();
+// Create an Express app
 const app = express();
 
-mongoose.connect('mongodb+srv://suhagiyadivyesh:DIvyesh%40Mongodb@cluster0.w6fsp.mongodb.net/employee_System?retryWrites=true&w=majority', {
-    useNewUrlParser: true,
-}).then(() => {
-    console.log("Successfully connected to the database");
-}).catch((error) => {
-    console.log("Database connection failed. Exiting now...");
-    console.log(error);
-});
+// Set up middleware and routes as needed
 
-app.get('/', (req,res)=>{
-    return res.send('Welcome!')
+// Define MongoDB connection string
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://suhagiyadivyesh:DIvyesh%40Mongodb@cluster0.w6fsp.mongodb.net/employee_System?retryWrites=true&w=majority';
+
+// Connect to MongoDB
+mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => {
+    console.log('Connected to MongoDB');
+    
+    // Start your Express server after successfully connecting to MongoDB
+    const port = process.env.PORT || 3000;
+    app.listen(port, () => {
+      console.log(`Server is running on port ${port}`);
+    });
   })
-  
-  app.listen(3500 , () => {
-      console.log('Server started on http://localhost:3500/')
-  })
+  .catch((error) => {
+    console.error('Error connecting to MongoDB:', error.message);
+  });
+
+// Define your mongoose schema and models, and set up routes and middleware as needed
+
+// Example route
+app.get('/', (req, res) => {
+  res.send('Hello, World!');
+});
